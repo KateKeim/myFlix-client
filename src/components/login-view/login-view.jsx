@@ -11,20 +11,26 @@ export const LoginView = ({ onLoggedIn }) => {
     event.preventDefault();
 
     const data = {
-      access: username,
-      secret: password
+      Username: username,
+      Password: password,
     };
 
-    fetch("https://openlibrary.org/account/login.json", {
+    fetch("https://myflixck.herokuapp.com/login", {
       method: "POST",
-      body: JSON.stringify(data)
-    }).then((response) => {
-      if (response.ok) {
-        onLoggedIn(username);
-      } else {
-        alert("Login failed");
-      }
-    });
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.token) {
+          onLoggedIn(username);
+        } else {
+          alert(JSON.stringify(response));
+          alert("Login failed");
+        }
+      });
   };
 
   return (
