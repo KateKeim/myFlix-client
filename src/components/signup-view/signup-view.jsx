@@ -5,16 +5,16 @@ export const SignupView = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [birthdate, setBirthdate] = useState("");
+  const [birthday, setBirthday] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const data = {
-      username,
-      password,
-      email,
-      birthdate,
+      Username: username,
+      Password: password,
+      Email: email,
+      Birthday: birthday,
     };
 
     fetch("https://myflixck.herokuapp.com/users", {
@@ -69,11 +69,11 @@ export const SignupView = () => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Birthdate:</Form.Label>
+            <Form.Label>Birthday:</Form.Label>
             <Form.Control
               type="date"
-              value={birthdate}
-              onChange={(e) => setBirthdate(e.target.value)}
+              value={birthday}
+              onChange={(e) => setBirthday(e.target.value)}
               required
               className="bg-light"
             />

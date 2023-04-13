@@ -13,11 +13,11 @@ export const MovieView = ({ movies, user, token, updateUser }) => {
   );
 
   const [isFavorite, setIsFavorite] = useState(
-    user.favoriteMovies.includes(movie.id)
+    user.FavoriteMovies.includes(movie._id)
   );
 
   useEffect(() => {
-    setIsFavorite(user.favoriteMovies.includes(movie.id));
+    setIsFavorite(user.FavoriteMovies.includes(movie._id));
   }, [movieId]);
 
   const addFavorite = () => {

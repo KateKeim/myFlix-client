@@ -14,8 +14,9 @@ export const ProfileView = ({
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
 
-  //let favoriteMovies = movies.filter((doc) =>
-  //user.favoriteMovies.includes(doc.id));
+  let favoriteMovies = movies.filter((movies) =>
+    user.FavoriteMovies.includes(movies._id)
+  );
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -25,6 +26,7 @@ export const ProfileView = ({
       password,
       email,
       birthday,
+      favoriteMovies,
     };
 
     fetch(`https://myflixck.herokuapp.com/users/${user.username}`, {
@@ -81,6 +83,7 @@ export const ProfileView = ({
             <Card.Title>Your info</Card.Title>
             <p>Username: {user.username}</p>
             <p>Email: {user.email}</p>
+            <p>My Movie List: {user.favoriteMovies}</p>
           </Card.Body>
         </Card>
         <Button
@@ -151,6 +154,11 @@ export const ProfileView = ({
       <Col md={12}>
         <h3 className="mt-3 mb-3 text-light">Your favorite movies:</h3>
       </Col>
+      {favoriteMovies.map((movies) => (
+        <Col className="mb-4" key={movies._id} x1={2} lg={3} md={4} xs={6}>
+          <MovieCard movie={movies} />
+        </Col>
+      ))}
     </>
   );
 };
