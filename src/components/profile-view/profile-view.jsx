@@ -14,9 +14,8 @@ export const ProfileView = ({
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
 
-  let favoriteMovies = movies.filter((doc) =>
-    user.favoriteMovies.includes(doc.id)
-  );
+  //let favoriteMovies = movies.filter((doc) =>
+  //user.favoriteMovies.includes(doc.id));
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -80,9 +79,8 @@ export const ProfileView = ({
         <Card className="mt-2 mb-3">
           <Card.Body>
             <Card.Title>Your info</Card.Title>
-            <p>Username: {user.Username}</p>
-            <p>Email: {user.Email}</p>
-            <p>Birthday: {user.Birthday.slice(0, 10)}</p>
+            <p>Username: {user.username}</p>
+            <p>Email: {user.email}</p>
           </Card.Body>
         </Card>
         <Button
@@ -153,11 +151,6 @@ export const ProfileView = ({
       <Col md={12}>
         <h3 className="mt-3 mb-3 text-light">Your favorite movies:</h3>
       </Col>
-      {favoriteMovies.map((doc) => (
-        <Col className="mb-4" key={doc.id} xl={2} lg={3} md={4} xs={6}>
-          <MovieCard movie={doc} />
-        </Col>
-      ))}
     </>
   );
 };
