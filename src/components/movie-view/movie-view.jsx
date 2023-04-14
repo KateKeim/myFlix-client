@@ -9,7 +9,7 @@ export const MovieView = ({ movies, user, token, updateUser }) => {
   const { movieId } = useParams();
   const movie = movies.find((m) => m.id === movieId);
   const similarMovies = movies.filter((movie) =>
-    movie.genre === movie.genre ? true : false
+    movie.Genre === movie.Genre ? true : false
   );
 
   const [isFavorite, setIsFavorite] = useState(
@@ -22,7 +22,7 @@ export const MovieView = ({ movies, user, token, updateUser }) => {
 
   const addFavorite = () => {
     fetch(
-      `https://myflixck.herokuapp.com/users/${user.username}/movies/${movieId}`,
+      `https://myflixck.herokuapp.com/users/${user.Username}/movies/${movieId}`,
       {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
@@ -50,7 +50,7 @@ export const MovieView = ({ movies, user, token, updateUser }) => {
 
   const removeFavorite = () => {
     fetch(
-      `https://myflixck.herokuapp.com/users/${user.username}/movies/${movieId}`,
+      `https://myflixck.herokuapp.com/users/${user.Username}/movies/${movieId}`,
       {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
@@ -78,11 +78,10 @@ export const MovieView = ({ movies, user, token, updateUser }) => {
 
   return (
     <>
-      <Col md={12}>
         <div className="text-light">
           <img
             className="float-start me-3 mb-2"
-            src={movie.image}
+            src={movie.ImagePath}
             alt="Movie Cover Image"
           />
           <h2>{movie.title}</h2>
@@ -105,9 +104,8 @@ export const MovieView = ({ movies, user, token, updateUser }) => {
           )}
           <h3 className="mt-3 mb-3 text-light">Similar movies:</h3>
         </div>
-      </Col>
       {similarMovies.map((movie) => (
-        <Col className="mb-4" key={movie.id} xl={2} lg={3} md={4} xs={6}>
+        <Col className="mb-4" key={movie._id} xl={2} lg={3} md={4} xs={6}>
           <MovieCard movie={movie} />
         </Col>
       ))}
