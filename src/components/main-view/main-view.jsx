@@ -55,6 +55,9 @@ export const MainView = () => {
           setToken(null);
           localStorage.clear();
         }}
+        onSearch={(query) => {
+          setViewMovies(movies.filter(movie => movie.Title.toLowerCase().includes(query.toLowerCase())));
+      }}
       />
       <Row className="justify-content-center">
         <Routes>
