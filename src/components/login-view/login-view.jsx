@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducers/user";
 
-export const LoginView = ({ onLoggedIn }) => {
+export const LoginView = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -24,6 +27,7 @@ export const LoginView = ({ onLoggedIn }) => {
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("token", data.token);
           onLoggedIn(data.user, data.token);
+          dispatch(setUser(username));
         } else {
           alert("Login failed");
         }
@@ -34,22 +38,20 @@ export const LoginView = ({ onLoggedIn }) => {
   };
 
   return (
-    <Card className="mt-2 mb-3">
-      <Card.Body>
-        <Card.Title>Log in</Card.Title>
         <Form onSubmit={handleSubmit}>
-          <Form.Group>
+          <Form.Group controlId="formUsername">
             <Form.Label>Username:</Form.Label>
             <Form.Control
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              minLength="5"
+              minLength="3"
               className="bg-light"
             />
           </Form.Group>
-          <Form.Group>
+
+          <Form.Group controlId="formPassword">
             <Form.Label>Password:</Form.Label>
             <Form.Control
               type="password"
@@ -63,7 +65,5 @@ export const LoginView = ({ onLoggedIn }) => {
             Submit
           </Button>
         </Form>
-      </Card.Body>
-    </Card>
   );
 };
