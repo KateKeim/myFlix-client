@@ -1,164 +1,127 @@
-import { useEffect, useState } from "react";
-import { MovieView } from "../movie-view/movie-view";
+import PropTypes from "prop-types";
+import { Button, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router";
 import { MovieCard } from "../movie-card/movie-card";
-import { LoginView } from "../login-view/login-view";
-import { SignupView } from "../signup-view/signup-view";
-import { NavigationBar } from "../navigation-bar/navigation-bar";
-import { ProfileView } from "../profile-view/profile-view";
-import { Row, Col } from "react-bootstrap";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { setMovies } from "../../redux/reducers/movies";
+import { useEffect, useState } from "react";
 
-export const MainView = () => {
-  const movies = useSelector ((state) => state.movies);
-  const storedUser = localStorage.getItem("user");
-  const storedToken = localStorage.getItem("token");
-  const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
-  const [token, setToken] = useState(storedToken ? storedToken : null);
+export const MovieView = ({ movies, user, token, updateUser }) => {
+  const { movieId } = useParams();
+  const movie = movies.find((m) => m.id === movieId);
+  const similarMovies = movies.filter((movie) =>
+    movie.Genre === movie.Genre ? true : false
+  );
 
-  const dispatch = useDispatch();
-
-  const updateUser = (user) => {
-    setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
-  };
+  const [isFavorite, setIsFavorite] = useState(
+    user.FavoriteMovies.includes(movie._id)
+  );
 
   useEffect(() => {
-    if (!token) return;
+    setIsFavorite(user.FavoriteMovies.includes(movie._id));
+  }, [movieId]);
 
-    fetch("https://myflixck.herokuapp.com/movies", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((resonse) => resonse.json())
-      .then((data) => {
-        const moviesFromAPI = data.map((doc) => {
-          return {
-            id: doc._id,
-            title: doc.Title,
-            description: doc.Description,
-            genre: doc.Genre.Name,
-            director: doc.Director.Name,
-            image: doc.ImagePath,
-          };
-        });
-        dispatch(setMovies(moviesFromAPI));
+  const addFavorite = () => {
+    fetch(
+      `https://myflixck.herokuapp.com/users/${Username}/movies/${movieId}`,
+      {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          alert("Failed");
+          return false;
+        }
+      })
+      .then((user) => {
+        if (user) {
+          alert("Successfully added to favorites");
+          setIsFavorite(true);
+          updateUser(user);
+        }
+      })
+      .catch((e) => {
+        alert(e);
       });
-  }, [token]);
+  };
+
+  const removeFavorite = () => {
+    fetch(
+      `https://myflixck.herokuapp.com/users/${user.Username}/movies/${movieId}`,
+      {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          alert("Failed");
+          return false;
+        }
+      })
+      .then((user) => {
+        if (user) {
+          alert("Successfully deleted from favorites");
+          setIsFavorite(false);
+          updateUser(user);
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  };
 
   return (
-    <BrowserRouter>
-      <NavigationBar
-        user={user}
-        onLoggedOut={() => {
-          setUser(null);
-          setToken(null);
-          localStorage.clear();
-        }}
-      />
-      <Row className="justify-content-center">
-        <Routes>
-          <Route
-            path="/signup"
-            element={
-              <>
-                {user ? (
-                  <Navigate to="/" />
-                ) : (
-                  <Col md={6}>
-                    <SignupView />
-                  </Col>
-                )}
-              </>
-            }
+    <>
+        <div className="text-light">
+          <img
+            className="float-start me-3 mb-2"
+            src={movie.ImagePath}
+            alt="Movie Cover Image"
           />
-          <Route
-            path="/login"
-            element={
-              <>
-                {user ? (
-                  <Navigate to="/" />
-                ) : (
-                  <Col md={6}>
-                    <LoginView
-                      onLoggedIn={(user, token) => {
-                        setUser(user);
-                        setToken(token);
-                      }}
-                    />
-                  </Col>
-                )}
-              </>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              !user ? (
-                <Navigate to="/login" replace />
-              ) : (
-                <ProfileView
-                  user={user}
-                  token={token}
-                  movies={movies}
-                  onLoggedOut={() => {
-                    setUser(null);
-                    setToken(null);
-                    localStorage.clear();
-                  }}
-                  updateUser={updateUser}
-                />
-              )
-            }
-          />
-          <Route
-            path="/movies/:movieId"
-            element={
-              <>
-                {!user ? (
-                  <Navigate to="/login" replace />
-                ) : movies.length === 0 ? (
-                  <Col>The list is empty</Col>
-                ) : (
-                  <MovieView
-                    movies={movies}
-                    user={user}
-                    token={token}
-                    updateUser={updateUser}
-                  />
-                )}
-              </>
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <>
-                {!user ? (
-                  <Navigate to="/login" replace />
-                ) : movies.length === 0 ? (
-                  <Col>The list is empty</Col>
-                ) : (
-                  <>
-                    {movies.map((movie) => (
-                      <Col
-                        className="mb-4"
-                        key={movie.id}
-                        xl={2}
-                        lg={3}
-                        md={4}
-                        xs={6}
-                      >
-                        <MovieCard movie={movie} />
-                      </Col>
-                    ))}
-                  </>
-                )}
-              </>
-            }
-          />
-        </Routes>
-      </Row>
-    </BrowserRouter>
+          <h2>{movie.title}</h2>
+          <p>{movie.description}</p>
+          <h5>Genre: </h5>
+          <p>{movie.genre}</p>
+          <h5>Director: </h5>
+          <p>{movie.director}</p>
+          <Link to={"/"}>
+            <Button variant="primary">Back</Button>
+          </Link>
+          {isFavorite ? (
+            <Button variant="danger" className="ms-2" onClick={removeFavorite}>
+              Remove from favorites
+            </Button>
+          ) : (
+            <Button variant="success" className="ms-2" onClick={addFavorite}>
+              Add to favorites
+            </Button>
+          )}
+          <h3 className="mt-3 mb-3 text-light">Similar movies:</h3>
+        </div>
+      {similarMovies.map((movie) => (
+        <Col className="mb-4" key={movie._id} xl={2} lg={3} md={4} xs={6}>
+          <MovieCard movie={movie} />
+        </Col>
+      ))}
+    </>
   );
+};
+
+MovieView.propTypes = {
+  movies: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      genre: PropTypes.string.isRequired,
+      director: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+    }).isRequired
+  ),
 };

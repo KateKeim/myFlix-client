@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/reducers/user";
 
 export const LoginView = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -27,7 +24,6 @@ export const LoginView = () => {
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("token", data.token);
           onLoggedIn(data.user, data.token);
-          dispatch(setUser(username));
         } else {
           alert("Login failed");
         }

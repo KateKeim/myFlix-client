@@ -16,7 +16,6 @@
   },
   "homepage": "https://github.com/KateKeim/myFlix-client#readme",
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.3",
     "bootstrap": "^5.2.3",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

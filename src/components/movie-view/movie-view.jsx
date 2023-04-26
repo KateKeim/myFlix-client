@@ -84,12 +84,12 @@ export const MovieView = ({ movies, user, token, updateUser }) => {
             src={movie.ImagePath}
             alt="Movie Cover Image"
           />
-          <h2>{movie.title}</h2>
-          <p>{movie.description}</p>
+          <h2>{movie.Title}</h2>
+          <p>{movie.Description}</p>
           <h5>Genre: </h5>
-          <p>{movie.genre}</p>
+          <p>{movie.Genre}</p>
           <h5>Director: </h5>
-          <p>{movie.director}</p>
+          <p>{movie.Director}</p>
           <Link to={"/"}>
             <Button variant="primary">Back</Button>
           </Link>
