@@ -26,10 +26,12 @@ export const LoginView = () => {
           onLoggedIn(data.user, data.token);
         } else {
           alert("Login failed");
+          console.log(data)
         }
       })
       .catch((e) => {
         alert("Something went wrong");
+        console.log(e)
       });
   };
 
