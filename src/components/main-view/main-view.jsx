@@ -22,7 +22,7 @@ export const MainView = () => {
   };
   useEffect(  () => {
     if (!token) return;
-    fetch("https://myflixck.herokuapp.com/movies", {
+    fetch("https://myflixck.herokuapp.com", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((resonse) => resonse.json())
