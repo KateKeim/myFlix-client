@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "react-scripts build"
   },
   "repository": {
     "type": "git",
@@ -15,6 +16,7 @@
     "url": "https://github.com/KateKeim/myFlix-client/issues"
   },
   "homepage": "https://github.com/KateKeim/myFlix-client#readme",
+  "main": "src/index.js",
   "dependencies": {
     "bootstrap": "^5.2.3",
     "prop-types": "^15.8.1",
